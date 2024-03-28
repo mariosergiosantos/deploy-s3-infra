@@ -1,0 +1,46 @@
+name: Gerenciar Terraform
+
+on:
+  pull_request:
+    branches:
+      - main
+      - release/*
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Verificar nome da branch e definir variáveis
+      run: |
+        if [[ ${{ github.ref }} == 'refs/heads/main' ]]; then
+          AMBIENTE="producao"
+        elif [[ ${{ github.ref }} == 'refs/heads/release/'* ]]; then
+          AMBIENTE="release"
+        fi
+        echo "Ambiente: $AMBIENTE"
+
+    - name: Criar workspace do Terraform
+      run: terraform workspace new $AMBIENTE || true
+
+    - name: Checkout do repositório
+      uses: actions/checkout@v2
+      
+    - name: Configurar AWS CLI
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1 # Substitua pela sua região
+
+    - name: Inicializar Terraform
+      run: terraform init
+
+    - name: Validar configurações do Terraform
+      run: terraform validate
+
+    - name: Planejar alterações
+      run: terraform plan -var-file="$AMBIENTE/vars.tfvars" -out=tfplan
+
+    - name: Aplicar alterações
+      run: terraform apply -auto-approve tfplan -var-file="$AMBIENTE/vars.tfvars"
