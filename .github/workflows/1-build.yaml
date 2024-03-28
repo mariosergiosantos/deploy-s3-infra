@@ -45,6 +45,10 @@ jobs:
     - name: Create Pull Request
       id: cpr
       uses: peter-evans/create-pull-request@v6
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        delete-branch: false
+        base: main
 
     - name: Abrir um Pull Request para a tag criada
       uses: peter-evans/create-pull-request@v3
@@ -54,9 +58,3 @@ jobs:
         base: main
         title: "Merge da versão ${{ steps.tag_version.outputs.new_tag }} para main"
         body: "Este pull request foi criado automaticamente para mesclar a versão ${{ steps.tag_version.outputs.new_tag }} na branch main."
-
-    # - name: Criar Branch de Release
-    #   if: github.ref == 'refs/heads/develop'
-    #   run: |
-    #     git checkout -b release/${{ github.run_number }}
-    #     git push origin release/${{ github.run_number }}
