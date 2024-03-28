@@ -19,19 +19,20 @@ jobs:
           AMBIENTE="release"
         fi
         echo "Ambiente: $AMBIENTE"
+      
+    - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "us-east-1"
+          mask-aws-account-id: "no"
 
     - name: Criar workspace do Terraform
       run: terraform workspace new $AMBIENTE || true
 
     - name: Checkout do repositório
       uses: actions/checkout@v2
-      
-    - name: Configurar AWS CLI
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1 # Substitua pela sua região
 
     - name: Inicializar Terraform
       run: terraform init
