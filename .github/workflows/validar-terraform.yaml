@@ -27,7 +27,7 @@ jobs:
       run: terraform validate
 
     - name: Planejar alterações
-      run: terraform plan -out=tfplan
+      run: terraform plan -var-file="hom/vars.tfvars" -out=tfplan
 
     - name: Criar Branch de Release
       if: github.ref == 'refs/heads/develop'
