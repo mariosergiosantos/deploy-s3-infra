@@ -10,18 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Verificar nome da branch e definir variáveis
-      run: |
-        if [[ ${{ github.ref }} == 'refs/heads/main' ]]; then
-          AMBIENTE="producao"
-        elif [[ ${{ github.ref }} == 'refs/heads/release/'* ]]; then
-          AMBIENTE="release"
-        fi
-        echo "Ambiente: $AMBIENTE"
-
-    - name: Criar workspace do Terraform
-      run: terraform workspace new $AMBIENTE || true
-
     - name: Checkout do repositório
       uses: actions/checkout@v2
       
@@ -39,7 +27,7 @@ jobs:
       run: terraform validate
 
     - name: Planejar alterações
-      run: terraform plan -var-file="$AMBIENTE/vars.tfvars" -out=tfplan
+      run: terraform plan -out=tfplan
 
     - name: Criar Branch de Release
       if: github.ref == 'refs/heads/develop'
