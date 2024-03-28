@@ -6,7 +6,8 @@ resource "aws_s3_bucket" "deploy_s3_demo" {
   bucket = "deploy-s3-demo-${var.environment}"
 
   tags = {
-    Environment = "${var.environment}"
+    environment = "${var.environment}"
+    project     = "deploy-s3"
   }
 }
 
