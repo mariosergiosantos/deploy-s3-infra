@@ -2,8 +2,8 @@ name: Gerenciar Terraform
 
 on:
   pull_request:
+    types: closed
     branches:
-      - main
       - release/*
 
 jobs:
@@ -40,7 +40,7 @@ jobs:
       run: terraform validate
 
     - name: Planejar alterações
-      run: terraform plan -var-file="$AMBIENTE/vars.tfvars" -out=tfplan
+      run: terraform plan -var-file="hom/vars.tfvars" -out=tfplan
 
     - name: Aplicar alterações
-      run: terraform apply -auto-approve tfplan -var-file="$AMBIENTE/vars.tfvars"
+      run: terraform apply -auto-approve tfplan -var-file="hom/vars.tfvars"

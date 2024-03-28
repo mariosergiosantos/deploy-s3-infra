@@ -1,4 +1,4 @@
-name: Gerenciar Terraform
+name: "1 - BUILD & PR"
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
         aws-region: us-east-1 # Substitua pela sua região
 
     - name: Checkout do repositório
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Inicializar Terraform
       run: terraform init
@@ -29,17 +29,21 @@ jobs:
     - name: Planejar alterações
       run: terraform plan -var-file="hom/vars.tfvars" -out=tfplan
 
-    - name: Criar Branch de Release
-      if: github.ref == 'refs/heads/develop'
-      run: |
-        git checkout -b release/${{ github.run_number }}
-        git push origin release/${{ github.run_number }}
+    - uses: actions/checkout@v4
+    - name: Bump version and push tag
+      id: tag_version
+      uses: mathieudutour/github-tag-action@v6.2
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create a GitHub release
+      uses: ncipollo/release-action@v1
+      with:
+        tag: ${{ steps.tag_version.outputs.new_tag }}
+        name: Release ${{ steps.tag_version.outputs.new_tag }}
+        body: ${{ steps.tag_version.outputs.changelog }}
 
-    # - name: Criar Pull Request automaticamente
+    # - name: Criar Branch de Release
     #   if: github.ref == 'refs/heads/develop'
-    #   uses: peter-evans/create-pull-request@v3
-    #   with:
-    #     token: ${{ secrets.GITHUB_TOKEN }}
-    #     branch: release/${{ github.run_number }}
-    #     title: "Merge da branch de main para release"
-    #     body: "Este pull request foi criado automaticamente para mesclar a branch de main para a branch de release."
+    #   run: |
+    #     git checkout -b release/${{ github.run_number }}
+    #     git push origin release/${{ github.run_number }}
