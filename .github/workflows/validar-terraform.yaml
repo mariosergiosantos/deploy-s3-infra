@@ -36,7 +36,6 @@ jobs:
         git push origin release/${{ github.run_number }}
 
     - name: Criar Pull Request automaticamente
-      if: github.ref == 'refs/heads/main'
       uses: peter-evans/create-pull-request@v3
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
