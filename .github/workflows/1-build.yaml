@@ -49,9 +49,10 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         delete-branch: false
         base: main
+        branch: ${{ steps.tag_version.outputs.new_tag }}
 
     - name: Abrir um Pull Request para a tag criada
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v6
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         branch: ${{ steps.tag_version.outputs.new_tag }}
