@@ -29,12 +29,16 @@ jobs:
     - name: Planejar alterações
       run: terraform plan -var-file="hom/vars.tfvars" -out=tfplan
 
+  open-pr:
+    needs:
+      - terraform
     - uses: actions/checkout@v4
     - name: Bump version and push tag
       id: tag_version
       uses: mathieudutour/github-tag-action@v6.2
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        
     - name: Create a GitHub release
       uses: ncipollo/release-action@v1
       with:
@@ -50,12 +54,5 @@ jobs:
         delete-branch: false
         base: ${{ steps.tag_version.outputs.new_tag }}
         branch: main
-
-    - name: Abrir um Pull Request para a tag criada
-      uses: peter-evans/create-pull-request@v6
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ steps.tag_version.outputs.new_tag }}
-        base: main
         title: "Merge da versão ${{ steps.tag_version.outputs.new_tag }} para main"
         body: "Este pull request foi criado automaticamente para mesclar a versão ${{ steps.tag_version.outputs.new_tag }} na branch main."
