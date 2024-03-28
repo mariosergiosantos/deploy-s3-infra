@@ -1,4 +1,4 @@
-name: Gerenciar Terraform
+name: Deploy terraform
 
 on:
   pull_request:
@@ -28,7 +28,7 @@ jobs:
         aws-region: us-east-1 # Substitua pela sua região
 
     - name: Criar workspace do Terraform
-      run: terraform workspace new $AMBIENTE || true
+      run: terraform workspace new hom
 
     - name: Checkout do repositório
       uses: actions/checkout@v2
