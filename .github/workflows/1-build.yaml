@@ -30,8 +30,10 @@ jobs:
       run: terraform plan -var-file="hom/vars.tfvars" -out=tfplan
 
   open-pr:
-    needs:
-      - terraform
+    needs: terraform
+    runs-on: ubuntu-latest
+
+    steps:
     - uses: actions/checkout@v4
     - name: Bump version and push tag
       id: tag_version
