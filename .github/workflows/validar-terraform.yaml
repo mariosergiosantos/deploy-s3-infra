@@ -32,15 +32,14 @@ jobs:
     - name: Criar Branch de Release
       if: github.ref == 'refs/heads/develop'
       run: |
-        git checkout main
         git checkout -b release/${{ github.run_number }}
         git push origin release/${{ github.run_number }}
 
-    - name: Criar Pull Request automaticamente
-      if: github.ref == 'refs/heads/develop'
-      uses: peter-evans/create-pull-request@v3
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        branch: release/${{ github.run_number }}
-        title: "Merge da branch de main para release"
-        body: "Este pull request foi criado automaticamente para mesclar a branch de main para a branch de release."
+    # - name: Criar Pull Request automaticamente
+    #   if: github.ref == 'refs/heads/develop'
+    #   uses: peter-evans/create-pull-request@v3
+    #   with:
+    #     token: ${{ secrets.GITHUB_TOKEN }}
+    #     branch: release/${{ github.run_number }}
+    #     title: "Merge da branch de main para release"
+    #     body: "Este pull request foi criado automaticamente para mesclar a branch de main para a branch de release."
