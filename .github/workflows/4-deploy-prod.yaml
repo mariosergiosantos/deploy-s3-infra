@@ -4,7 +4,7 @@ on:
   pull_request:
     types: closed
     branches:
-      - release/*
+      - main/*
 
 jobs:
   terraform:
@@ -40,7 +40,7 @@ jobs:
       run: terraform validate
 
     - name: Planejar alterações
-      run: terraform plan -var-file="hom/vars.tfvars" -out=tfplan
+      run: terraform plan -var-file="prod/vars.tfvars" -out=tfplan
 
     - name: Aplicar alterações
-      run: terraform apply -auto-approve tfplan -var-file="hom/vars.tfvars"
+      run: terraform apply -auto-approve -var-file="prod/vars.tfvars"

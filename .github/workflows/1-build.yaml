@@ -48,13 +48,13 @@ jobs:
         name: Release ${{ steps.tag_version.outputs.new_tag }}
         body: ${{ steps.tag_version.outputs.changelog }}
 
-    - name: Create Pull Request
-      id: cpr
-      uses: peter-evans/create-pull-request@v6
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        delete-branch: false
-        base: ${{ steps.tag_version.outputs.new_tag }}
-        branch: main
-        title: "Merge da versão ${{ steps.tag_version.outputs.new_tag }} para main"
-        body: "Este pull request foi criado automaticamente para mesclar a versão ${{ steps.tag_version.outputs.new_tag }} na branch main."
+    # - name: Create Pull Request
+    #   id: cpr
+    #   uses: peter-evans/create-pull-request@v6
+    #   with:
+    #     token: ${{ secrets.GITHUB_TOKEN }}
+    #     delete-branch: false
+    #     base: ${{ steps.tag_version.outputs.new_tag }}
+    #     branch: main
+    #     title: "Merge da versão ${{ steps.tag_version.outputs.new_tag }} para main"
+    #     body: "Este pull request foi criado automaticamente para mesclar a versão ${{ steps.tag_version.outputs.new_tag }} na branch main."

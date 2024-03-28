@@ -43,4 +43,4 @@ jobs:
       run: terraform plan -var-file="hom/vars.tfvars" -out=tfplan
 
     - name: Aplicar alterações
-      run: terraform apply -auto-approve tfplan -var-file="hom/vars.tfvars"
+      run: terraform apply -auto-approve -var-file="hom/vars.tfvars"
