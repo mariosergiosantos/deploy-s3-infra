@@ -32,6 +32,7 @@ jobs:
     - name: Criar Branch de Release
       if: github.ref == 'refs/heads/develop'
       run: |
+        git checkout main
         git checkout -b release/${{ github.run_number }}
         git push origin release/${{ github.run_number }}
 
