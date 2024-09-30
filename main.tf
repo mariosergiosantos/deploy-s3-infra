@@ -1,5 +1,34 @@
+terraform {
+  required_version = "1.6.1"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "5.43.0"
+    }
+  }
+
+  backend "s3" {
+    bucket         = "token-validator-terraform-backend"
+    key            = "backend.tf"
+    region         = "us-east-1"
+  }
+}
+
 provider "aws" {
-  region  = "${var.region}"
+  region = var.region
+}
+
+data "aws_caller_identity" "current" {
+
+}
+
+resource "aws_s3_bucket" "remote-state" {
+  bucket = "tfstate-${aws_caller_identity.current.account_id}"
+
+  versioning {
+    enabled = true
+  }
 }
 
 resource "aws_s3_bucket" "deploy_s3_demo" {
@@ -125,8 +154,8 @@ resource "aws_s3_bucket_policy" "policy" {
     Version = "2012-10-17",
     Statement = [
       {
-        Sid = "PublicReadGetObject",
-        Effect = "Allow",
+        Sid       = "PublicReadGetObject",
+        Effect    = "Allow",
         Principal = "*",
         Action = [
           "s3:GetObject"
