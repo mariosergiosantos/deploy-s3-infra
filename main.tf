@@ -20,7 +20,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "remote-state" {
-  bucket = "tfstate-${aws_caller_identity.current.account_id}"
+  bucket = "tfstate-251839969735"
 
   versioning {
     enabled = true
