@@ -11,7 +11,7 @@ terraform {
   backend "s3" {
     bucket         = "token-validator-terraform-backend"
     key            = "backend.tf"
-    region         = "us-east-1"
+    region         = "us-east-2"
   }
 }
 
